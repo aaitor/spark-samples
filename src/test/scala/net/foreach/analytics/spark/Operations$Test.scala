@@ -68,4 +68,18 @@ class Operations$Test extends FunSuite with BeforeAndAfterAll {
     assert(agg == (1+2+3+4+5 + (zeroVal + zeroVal)))
   }
 
+  test("testReduceByKey") {
+    val list= List(("panda", 0), ("pink", 3), ("pirate", 3), ("panda", 1), ("pink", 4))
+    val rdd= sc.parallelize(list)
+
+    val reduce= rdd.mapValues(x => (x,1)).reduceByKey(
+      (x, y) => (x._1 + y._1 , x._2 + y._2)
+    )
+    assert(reduce.collect().toList{0}._2.equals( (1, 2)))
+    assert(reduce.collect().toList{1}._2.equals( (3, 1)))
+    assert(reduce.collect().toList{2}._2.equals( (7, 2)))
+
+  }
+
+
 }
