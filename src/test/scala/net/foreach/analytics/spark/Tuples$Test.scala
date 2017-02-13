@@ -68,8 +68,19 @@ class Tuples$Test extends FunSuite with BeforeAndAfterAll {
     assert( join.collect().toList{0}._2.equals( (4,9) ))
     assert( join.collect().toList{1}._2.equals( (6,9) ))
 
+    // Perform a join between two RDDs where the key must be present in the other RDD
+    val rightOuterJoin= rdd.rightOuterJoin(other) // {(3,(Some(4),9)),(3,(Some(6),9))}
+    assert( rightOuterJoin.collect().toList{0}._2.equals( (Some(4),9) ))
+    assert( rightOuterJoin.collect().toList{1}._2.equals( (Some(6),9) ))
 
+    // Perform a join between two RDDs where the key must be present in the first RDD.
+    val leftOuterJoin= rdd.leftOuterJoin(other) // {(1, (2, None)), (3,(4,Some(9))),(3,(6,Some(9)))}
+    assert( leftOuterJoin.collect().toList{0}._2.equals( (2, None )) )
+    assert( leftOuterJoin.collect().toList{1}._2.equals( (4, Some(9)) ))
+    assert( leftOuterJoin.collect().toList{2}._2.equals( (6, Some(9)) ))
 
-
+    // Group data from both RDDs sharing the same key.
+    val cogroup= rdd.cogroup(other) // {(1,([2],[])), (3, ([4, 6],[9]))}
+    assert( cogroup.collect().toList{1}._2._1.size == 2 )
   }
 }
