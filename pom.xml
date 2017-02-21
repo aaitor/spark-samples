@@ -5,9 +5,11 @@
   <version>0.0.1-SNAPSHOT</version>
 
   <properties>
-    <spark.version>2.1.0</spark.version>
-    <scala.version>2.11.8</scala.version>
-    <scala.binary.version>2.11</scala.binary.version>
+      <spark.version>2.1.0</spark.version>
+      <hbase.version>1.1.2</hbase.version>
+
+      <scala.version>2.11.8</scala.version>
+      <scala.binary.version>2.11</scala.binary.version>
   </properties>
 
   <dependencies>
@@ -30,6 +32,17 @@
           <groupId>org.apache.spark</groupId>
           <artifactId>spark-streaming_${scala.binary.version}</artifactId>
           <version>${spark.version}</version>
+      </dependency>
+
+      <dependency>
+          <groupId>org.apache.hbase</groupId>
+          <artifactId>hbase-client</artifactId>
+          <version>${hbase.version}</version>
+      </dependency>
+      <dependency>
+          <groupId>org.apache.hbase</groupId>
+          <artifactId>hbase-server</artifactId>
+          <version>${hbase.version}</version>
       </dependency>
 
       <dependency>
@@ -100,6 +113,7 @@
             <version>2.7</version>
             <configuration>
                 <skipTests>true</skipTests>
+                <!--<argLine>-DHADOOP_USER_NAME=hbase</argLine>-->
             </configuration>
         </plugin>
         <plugin>
